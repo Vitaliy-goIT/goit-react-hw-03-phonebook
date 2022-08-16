@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import { GlobalStyles } from './GlobalStyles';
-import { nanoid } from 'nanoid';
+import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
+import { Form } from './Form/Form';
 
 export class App extends Component {
   state = {
@@ -11,18 +13,16 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  onChange = e => {
-    const { name } = e.target;
+  handleFilterChange = e => {
+    const { value } = e.target;
     this.setState({
-      [name]: e.target.value,
+      filter: value,
     });
   };
 
-  filter = () => {
+  filterContactList = () => {
     const { contacts, filter } = this.state;
     const validFilter = filter.toLowerCase();
     return contacts.filter(contact =>
@@ -30,78 +30,50 @@ export class App extends Component {
     );
   };
 
-  reset = () => {
-    this.setState({
-      name: '',
-      number: '',
-    });
-  };
-
-  createContact = () => {
-    return {
-      id: nanoid(5),
-      name: this.state.name,
-      number: this.state.number,
-    };
-  };
-
-  onSubmit = evt => {
-    evt.preventDefault();
-    const contact = this.createContact();
+  handleDeleteContact = id => {
     this.setState(prevState => ({
-      contacts: [contact, ...prevState.contacts],
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
-    this.reset();
+  };
+
+  formSubmitHandler = data => {
+    const { contacts } = this.state;
+    const findName = contacts.find(
+      contact => contact.name === data.name.trim()
+    );
+
+    if (!findName) {
+      this.setState(prevState => ({
+        contacts: [data, ...prevState.contacts],
+      }));
+    } else {
+      return alert(`${findName.name} is already in contacts.`);
+    }
   };
 
   render() {
-    const filteredArray = this.filter();
+    const {
+      handleDeleteContact,
+      handleFilterChange,
+      filterContactList,
+      formSubmitHandler,
+    } = this;
+    const { filter } = this.state;
+    // const filteredArray = filterContactList();
+
     return (
       <>
-        <form onSubmit={this.onSubmit}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-              value={this.state.name}
-              onChange={this.onChange}
-            />
-          </label>
-          <label>
-            Number
-            <input
-              type="tel"
-              name="number"
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-              value={this.state.number}
-              onChange={this.onChange}
-            />
-          </label>
-          <button type="submit">Add contact</button>
-        </form>
+        <h2>Phonebook</h2>
+        <Form onSubmit={formSubmitHandler} />
+
         <div>
-          <p>Contacts</p>
-          <input
-            type="text"
-            name="filter"
-            value={this.state.filter}
-            onChange={this.onChange}
+          <h2>Contacts</h2>
+          <Filter inputValue={filter} onChange={handleFilterChange} />
+
+          <ContactList
+            onFilter={filterContactList()}
+            onDelete={handleDeleteContact}
           />
-          <ul>
-            {filteredArray.map(contact => {
-              return (
-                <li key={contact.id}>
-                  {contact.name} : {contact.number}
-                </li>
-              );
-            })}
-          </ul>
         </div>
         <GlobalStyles />
       </>
