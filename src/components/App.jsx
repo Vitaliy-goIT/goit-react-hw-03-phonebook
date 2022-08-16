@@ -22,6 +22,14 @@ export class App extends Component {
     });
   };
 
+  filter = () => {
+    const { contacts, filter } = this.state;
+    const validFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(validFilter)
+    );
+  };
+
   reset = () => {
     this.setState({
       name: '',
@@ -46,9 +54,8 @@ export class App extends Component {
     this.reset();
   };
 
-  // evt.target.elements.name.value;
-
   render() {
+    const filteredArray = this.filter();
     return (
       <>
         <form onSubmit={this.onSubmit}>
@@ -80,9 +87,14 @@ export class App extends Component {
         </form>
         <div>
           <p>Contacts</p>
-          <input type="text" name="filter" value={this.state.filter} />
+          <input
+            type="text"
+            name="filter"
+            value={this.state.filter}
+            onChange={this.onChange}
+          />
           <ul>
-            {this.state.contacts.map(contact => {
+            {filteredArray.map(contact => {
               return (
                 <li key={contact.id}>
                   {contact.name} : {contact.number}
