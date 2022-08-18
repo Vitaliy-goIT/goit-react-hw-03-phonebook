@@ -2,7 +2,7 @@ export const theme = {
   colors: {
     black: '#000',
     white: '#fff',
-    text: '#20b9ce',
+    text: '#474083',
     total: '#057d8d',
     background: '#fff',
     primary: '#7547e0',
@@ -10,6 +10,7 @@ export const theme = {
     accent: '#9174fa',
     muted: '#f6f6f6',
     percent: '#023a7a',
+    bg: '#9ec0eb',
   },
   space: [0, 2, 4, 8, 16, 32, 64, 128, 256],
   fonts: {

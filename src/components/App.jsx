@@ -3,6 +3,8 @@ import { GlobalStyles } from './GlobalStyles';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { Form } from './Form/Form';
+import { Box } from './Box';
+import { Section } from './Section/Section';
 
 export class App extends Component {
   state = {
@@ -59,24 +61,31 @@ export class App extends Component {
       formSubmitHandler,
     } = this;
     const { filter } = this.state;
-    // const filteredArray = filterContactList();
 
     return (
-      <>
-        <h2>Phonebook</h2>
-        <Form onSubmit={formSubmitHandler} />
+      <Box padding={5}>
+        <Section title="Phonebook">
+          <Form onSubmit={formSubmitHandler} />
+        </Section>
 
-        <div>
-          <h2>Contacts</h2>
-          <Filter inputValue={filter} onChange={handleFilterChange} />
+        <Box
+          as="div"
+          display="inline-block"
+          width="400px"
+          padding={4}
+          margin-top={6}
+        >
+          <Section title="Contacts">
+            <Filter inputValue={filter} onChange={handleFilterChange} />
 
-          <ContactList
-            onFilter={filterContactList()}
-            onDelete={handleDeleteContact}
-          />
-        </div>
+            <ContactList
+              onFilter={filterContactList()}
+              onDelete={handleDeleteContact}
+            />
+          </Section>
+        </Box>
         <GlobalStyles />
-      </>
+      </Box>
     );
   }
 }
