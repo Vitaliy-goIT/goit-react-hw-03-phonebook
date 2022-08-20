@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import { FormStyle, BtnStyle, Label, Input } from './Form.styled';
 
 export class Form extends Component {
+  static propType = {
+    onSubmit: PropTypes.func,
+  };
+
   state = {
     name: '',
     number: '',
@@ -74,7 +78,3 @@ export class Form extends Component {
     );
   }
 }
-
-Form.propType = {
-  onSubmit: PropTypes.func,
-};
