@@ -4,7 +4,7 @@ export const SectionStyle = styled.section`
   max-width: 400px;
   font-size: ${p => p.theme.fontSizes.s};
 
-  :not(:first-child) {
+  :not(:first-of-type) {
     margin-top: ${p => p.theme.space[6]}px;
   }
 `;
